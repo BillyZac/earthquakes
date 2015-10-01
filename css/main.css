@@ -1,0 +1,30 @@
+body {
+	background: #fff;
+	font-family: sans-serif;
+}
+
+#wrapper {
+	margin: 0 auto;
+	width: 800px;
+}
+
+canvas {
+	background: #9ee3e3;
+}
+
+#source {
+	text-align: right;
+	text-transform: uppercase;
+	letter-spacing: 0.02rem;
+	font-size: 0.75rem;
+	color: #ddd;
+}
+
+#source a {
+	color: #ddd;
+	text-decoration: none; 	
+}
+
+#source a:hover {
+	color: #9ee3e3;
+}
