@@ -3,6 +3,8 @@ var globalQuakes // For testing in the browser console.
 $( document ).ready(function() {
 // Data source: see http://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php
 var earthquakeAPI = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson";
+// Can pass lat and long params:
+earthquakeAPI = 'http://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&minlatitude=35.541&maxlatitude=42.350&minlongitude=-109.808&maxlongitude=-101.283'
 /* var earthquakeAPI = "http://www.billyzacsmith.com/earthquakes/test-data/test-partial.geojson"; */
 
 var markerSize = 15
@@ -59,6 +61,7 @@ xhr.onreadystatechange = function() {
 		var quakes = JSON.parse(xhr.responseText)
 		globalQuakes = quakes
 		console.log(quakes.features.length)
+		var counter = 0
 	    for (var i=0; i<quakes.features.length; i += 1) {
 				// map the lat and long coordinates to the x and y of the canvas
 				var x = mapLong(quakes.features[i].geometry.coordinates[0])
@@ -68,25 +71,57 @@ xhr.onreadystatechange = function() {
 					// ctx.fillText(quakes.features[i].properties.place, x, y)
 					// ctx.fillRect(x,y,5,5)
 
-					// Set marker size based on magnitude of quake
-	        var r = quakes.features[i].properties.sig
-	        markerSize = r*1.3
-					// Draw marker
-					ctx.beginPath()
-					ctx.arc(x,y,markerSize,0,6.28)
-					ctx.fill()
+					// USE setTimeout() TO HAVE IT ANIMATE IN
+					setTimeout(function() {
+						// Set marker size based on magnitude of quake
+		        var r = quakes.features[i].properties.sig
+		        markerSize = r*1.3
+						// Draw marker
+						ctx.beginPath()
+						ctx.arc(x,y,markerSize,0,6.28)
+						ctx.fill()
+						console.log(counter)
+					}, 10*counter)
+					counter++
 				}
 				// Goal: Add the top 5 quakes to the ul in the DOM
 					// For now, only show quakes with significance > 180 (whatever that means)
-					if (r > 180) {
-						var list = document.getElementsByClassName('quakesList')
-						var newItem = document.createElement('li')
-						newItem.innerText = quakes.features[i].properties.place
-						list[0].appendChild(newItem)
-					}
+					// if (r > 180) {
+					// 	var list = document.getElementsByClassName('quakesList')
+					// 	var newItem = document.createElement('li')
+					// 	newItem.innerText = quakes.features[i].properties.place
+					// 	list[0].appendChild(newItem)
+					// }
 	    }
 	} // end if block
 } // end onreadystatechange function
 xhr.open('GET', earthquakeAPI)
 xhr.send()
 }) // End ready
+
+
+// NEXT: ORGANIZE LIKE THIS: PROMISES, MODULAR...
+// $.get('url')
+// 	.done(function(data) {
+// 		var mag = $('.slider').val()
+// 		drawUI(data, {
+// 			"maxMagnitude": mag
+// 		})
+// 	})
+// 	.fail(function(error) {
+// 			drawFromLocalStorage()
+// 	})
+//
+// $('.slider').on('change', function() {
+// 	var mag = $('.slider').val()
+// 	// Put this into a function drawFromLocalStorage()
+// 	var dataFromLocalStorage = JSON.parse(localStorage.getItem('earthquakes'))
+//
+// 	drawUI(dataFromLocalStorage, {
+// 		"maxMagnitude": mag
+// 	})
+// })
+//
+// function drawUI(data, options) {
+//
+// }
