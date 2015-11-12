@@ -76,6 +76,14 @@ xhr.onreadystatechange = function() {
 					ctx.arc(x,y,markerSize,0,6.28)
 					ctx.fill()
 				}
+				// Goal: Add the top 5 quakes to the ul in the DOM
+					// For now, only show quakes with significance > 180 (whatever that means)
+					if (r > 180) {
+						var list = document.getElementsByClassName('quakesList')
+						var newItem = document.createElement('li')
+						newItem.innerText = quakes.features[i].properties.place
+						list[0].appendChild(newItem)
+					}
 	    }
 	} // end if block
 } // end onreadystatechange function
